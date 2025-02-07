@@ -1,14 +1,24 @@
-import { View, Text } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import React, { useEffect } from 'react';
 import Button from '../components/Button';
-import { Link } from 'expo-router';
+import { Link, Redirect } from 'expo-router';
+import { useAuth } from '../providers/AuthProvider';
+import { supabase } from '../lib/supabase';
 
 
 
 const index = () => {
 
+const {session, loading} = useAuth()
+  console.log(session)
 
-  
+  if(loading){
+    return <ActivityIndicator />
+  }
+  if(!session){
+    return <Redirect href={'/sign-in'} />
+  }
+
   return (
     <View style={{ flex: 1, justifyContent: 'center', padding: 10 }}>
       <Link href={'/(user)'} asChild>
@@ -20,9 +30,9 @@ const index = () => {
       <Link href={'/(auth)/sign-in'} asChild>
         <Button text="Sign In" />
       </Link>
-      <Link href={'(auth)/sign-up'} asChild>
-        <Button text="Sign up" />
-      </Link>
+     
+        <Button text="Sign out" onPress={() => supabase.auth.signOut()} />
+     
     </View>
   );
 };

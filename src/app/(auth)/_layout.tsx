@@ -4,7 +4,8 @@ import {Text} from 'react-native'
 
 
 import { useColorScheme } from '@/src/components/useColorScheme';
-import { Stack } from 'expo-router';
+import { Redirect, Stack } from 'expo-router';
+import { useAuth } from '@/src/providers/AuthProvider';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -15,6 +16,11 @@ function TabBarIcon(props: {
 }
 
 export default function AuthLayout() {
+  const {session} = useAuth()
+
+  if(session){
+    return <Redirect href="/" />
+  }
 
   return (
     <Stack>
